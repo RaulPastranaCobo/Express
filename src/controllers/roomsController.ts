@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { RoomSchema } from '../validators/roomValidator';
 import { RoomService } from '../services/roomsService';
+import { Room } from '../interfaces/roomInterface';
 
 
 const service = new RoomService();
@@ -18,9 +19,9 @@ export const getRoomById = (req: Request, res: Response) => {
 
 export const createNewRoom = (req: Request, res: Response) => {
   const result = RoomSchema.safeParse(req.body);
-  if (!result.success) return res.status(400).json({ error: result.error.format() });
+  if (!result.success) res.status(400).json({ error: result.error.format() });
 
-  const created = service.create(result.data);
+  const created = service.create(result!.data as Room);
   res.status(201).json(created);
 };
 
@@ -29,13 +30,13 @@ export const updateRoomById = (req: Request, res: Response): Response => {
   const result = RoomSchema.safeParse(req.body);
 
   if (!result.success) {
-    return res.status(400).json({ error: result.error.format() });
+     res.status(400).json({ error: result.error.format() });
   }
 
-  const updated = service.update(id, result.data);
+  const updated = service.update(id, result!.data as Room);
 
   if (!updated) {
-    return res.status(404).json({ error: 'Room not found' });
+     res.status(404).json({ error: 'Room not found' });
   }
 
   return res.json(updated);
