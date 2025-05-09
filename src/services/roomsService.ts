@@ -1,4 +1,3 @@
-// services/roomsService.ts
 import RoomModel from '../models/Room';
 import { Room } from '../interfaces/roomInterface';
 
